@@ -53,7 +53,7 @@ public class ClientAppMain {
 
         @Override
         public void handleException(StompSession session, StompCommand command, StompHeaders headers, byte[] payload, Throwable exception) {
-            log.error("Got an exception in session {}", session.getSessionId(), exception);
+            log.error("Got an exception in session {}:", session.getSessionId(), exception);
         }
 
         @Override
@@ -69,11 +69,11 @@ public class ClientAppMain {
 
         @Override
         public void handleTransportError(StompSession session, Throwable exception) {
-            log.error("Got an exception for session {}. Reconnecting the client...", session.getSessionId(), exception);
+            log.error("Got an exception: '{}' for session {}. Reconnecting the client...", exception.getMessage(), session.getSessionId());
             try {
                 reconnectCallback.run();
             } catch (Exception e) {
-                log.error("Failed to reconnect", e);
+                log.error("Failed to reconnect. Error: {}", e.getMessage());
             }
         }
     }

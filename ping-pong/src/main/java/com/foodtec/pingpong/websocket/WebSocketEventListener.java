@@ -15,6 +15,9 @@ import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 import static com.foodtec.pingpong.config.PingPongAppConstants.CLIENT_ID_WS_HEADER_PARAM;
 import static com.foodtec.pingpong.config.PingPongAppConstants.WS_TOPIC_DESTINATION;
 
@@ -44,9 +47,11 @@ public class WebSocketEventListener {
         log.info("Client-id {} has been subscribed to the topic {}", clientId, topic);
 
         // Send subscription acknowledgement to the client
-        messageSendingOperations.convertAndSend(WS_TOPIC_DESTINATION,
-                String.format("server '%s' topic subscription acknowledgement", topic),
-                MessageHeadersUtil.buildHeaders(SimpMessageType.MESSAGE, sessionId));
+        Executors.newSingleThreadScheduledExecutor().schedule(
+                () -> messageSendingOperations.convertAndSend(WS_TOPIC_DESTINATION,
+                        String.format("server '%s' topic subscription acknowledgement", topic),
+                        MessageHeadersUtil.buildHeaders(SimpMessageType.MESSAGE, sessionId)),
+                1000, TimeUnit.MILLISECONDS);
     }
 
     @EventListener
