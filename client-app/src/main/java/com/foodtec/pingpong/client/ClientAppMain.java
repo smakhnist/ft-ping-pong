@@ -17,37 +17,40 @@ import java.util.Scanner;
 
 @Slf4j
 public class ClientAppMain {
-
     private static final String WS_TOPIC = "/acceptance/ping-pong";
-    public static final String WS_ENDPOINT = "/socket/ping-pong";
-
+    private static final String WS_ENDPOINT = "ws://localhost:8080/socket/ping-pong";
+    private static final String CLIENT_ID_WS_HEADER_PARAM = "Client-id";
+    private static final String AUTH_ID_WS_HEADER_PARAM = "Auth-id";
 
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        log.info("Starting WebSocket client...");
+        final String CLIENT_ID = "123";
+        final String AUTH_ID = "abcd";
 
-        connect();
-
+        connect(CLIENT_ID, AUTH_ID);
         new Scanner(System.in).nextLine(); // Don't close immediately.
     }
 
-    private static void connect() {
+    private static void connect(String clientId, String authId) {
         WebSocketStompClient stompClient = new WebSocketStompClient(new StandardWebSocketClient());
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
         stompClient.setMessageConverter(new CompositeMessageConverter(List.of(new MappingJackson2MessageConverter(), new StringMessageConverter())));
 
         WebSocketHttpHeaders handshakeHeaders = new WebSocketHttpHeaders();
-        handshakeHeaders.add("Auth-id", "abcd");
-        handshakeHeaders.add("Client-id", "123");
+        handshakeHeaders.add(CLIENT_ID_WS_HEADER_PARAM, clientId);
+        handshakeHeaders.add(AUTH_ID_WS_HEADER_PARAM, authId);
 
 
-        StompHeaders stompHeaders = new StompHeaders();
-        stompHeaders.add("Auth-id", "abcd");
-        stompHeaders.add("Client-id", "123");
-
-        stompClient.connectAsync("ws://localhost:8080" + WS_ENDPOINT, handshakeHeaders, stompHeaders, new MyStompSessionHandler());
+        stompClient.connectAsync(WS_ENDPOINT, handshakeHeaders, new StompHeaders(), new ClientStompSessionHandler(() -> connect(clientId, authId)));
     }
 
-    private static class MyStompSessionHandler extends StompSessionHandlerAdapter {
+    private static class ClientStompSessionHandler extends StompSessionHandlerAdapter {
+        private final Runnable reconnectCallback;
+
+        public ClientStompSessionHandler(Runnable reconnectCallback) {
+            this.reconnectCallback = reconnectCallback;
+        }
+
         @Override
         public void handleException(StompSession session, StompCommand command, StompHeaders headers, byte[] payload, Throwable exception) {
             log.error("Got an exception in session {}", session.getSessionId(), exception);
@@ -68,7 +71,7 @@ public class ClientAppMain {
         public void handleTransportError(StompSession session, Throwable exception) {
             log.error("Got an exception for session {}. Reconnecting the client...", session.getSessionId(), exception);
             try {
-                connect();
+                reconnectCallback.run();
             } catch (Exception e) {
                 log.error("Failed to reconnect", e);
             }

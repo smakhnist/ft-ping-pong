@@ -30,6 +30,6 @@ public class SecurityServiceControllerAdvice extends ResponseEntityExceptionHand
     protected ResponseEntity<String> handleException(
             RuntimeException ex, WebRequest request) {
         log.error("An INTERNAL_SERVER_ERROR error occurred", ex);
-        return ResponseEntity.status(500).body(ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
     }
 }

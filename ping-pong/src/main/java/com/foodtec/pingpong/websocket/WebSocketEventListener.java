@@ -1,4 +1,4 @@
-package com.foodtec.pingpong.config;
+package com.foodtec.pingpong.websocket;
 
 import com.foodtec.pingpong.service.ClientConnectionManager;
 import com.foodtec.pingpong.util.MessageHeadersUtil;

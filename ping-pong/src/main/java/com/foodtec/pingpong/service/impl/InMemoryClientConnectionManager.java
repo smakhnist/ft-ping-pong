@@ -17,7 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class InMemoryClientConnectionManager implements ClientConnectionManager, SessionLookupService {
     private final Map<String, String> userIdToSessionId = new ConcurrentHashMap<>();
 
-
     public void addSession(String userId, String sessionId) {
         userIdToSessionId.put(userId, sessionId);
     }

@@ -11,8 +11,7 @@ public class CustomWebSecurityConfigurerAdapter {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.addFilterAfter(
-                new FoodTecSecurityFilter(), BasicAuthenticationFilter.class);
+                new ClientConfigSecurityFilter(), BasicAuthenticationFilter.class);
         return http.build();
     }
-
 }

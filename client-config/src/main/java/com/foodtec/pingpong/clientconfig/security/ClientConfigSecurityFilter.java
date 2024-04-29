@@ -13,9 +13,10 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
+import java.util.Objects;
 
 
-public class FoodTecSecurityFilter extends GenericFilterBean {
+public class ClientConfigSecurityFilter extends GenericFilterBean {
     @Override
     public void doFilter(
             ServletRequest request,
@@ -23,15 +24,15 @@ public class FoodTecSecurityFilter extends GenericFilterBean {
             FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-        if (httpRequest.getHeader("Authorization") == null
-                || !httpRequest.getHeader("Authorization").startsWith("Basic ")) {
+        String authorizationHeader = httpRequest.getHeader("Authorization");
+        if (authorizationHeader == null
+                || !authorizationHeader.startsWith("Basic ")) {
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authorization header is missing or invalid.");
         }
 
-        String token = httpRequest.getHeader("Authorization").substring("Basic ".length());
+        String token = Objects.requireNonNull(authorizationHeader).substring("Basic ".length());
 
-        ApplicationContext ctx = WebApplicationContextUtils
-                .getRequiredWebApplicationContext(request.getServletContext());
+        ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getServletContext());
         RestTemplate restTemplate = ctx.getBean(RestTemplate.class);
         AppProperties appProperties = ctx.getBean(AppProperties.class);
 
