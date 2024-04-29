@@ -9,7 +9,7 @@ import java.util.Optional;
 @Service
 public class HardcodedTokenMappingService implements TokenMappingService {
     private final Map<String, String> tokenMap = Map.of(
-            "ping-pong", "pp12345678", // 10 chars
+            "client-config", "cc12345678", // 10 chars
             "some-app", "sa12345678"
     );
 

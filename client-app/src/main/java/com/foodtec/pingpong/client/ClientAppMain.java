@@ -55,6 +55,7 @@ public class ClientAppMain {
 
         @Override
         public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
+            log.info("New session established: {}. Connecting to topic: {}", session.getSessionId(), WS_TOPIC);
             session.subscribe(WS_TOPIC, this);
         }
 
@@ -65,7 +66,7 @@ public class ClientAppMain {
 
         @Override
         public void handleTransportError(StompSession session, Throwable exception) {
-            log.error("Got an exception for session {}", session.getSessionId(), exception);
+            log.error("Got an exception for session {}. Reconnecting the client...", session.getSessionId(), exception);
             try {
                 connect();
             } catch (Exception e) {

@@ -41,6 +41,11 @@ public class HttpSessionIdHandshakeInterceptor implements HandshakeInterceptor {
             return false;
         }
 
+        if (clientId.length() != 10) {
+            log.warn("Invalid clientId: {}", clientId);
+            return false;
+        }
+
         try {
             ClientConfig clientConfig = clientConfigObtainService.getClientConfig(clientId);
             if (!authId.equals(clientConfig.authId())) {
