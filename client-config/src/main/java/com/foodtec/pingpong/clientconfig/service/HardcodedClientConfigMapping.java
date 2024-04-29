@@ -25,6 +25,6 @@ public class HardcodedClientConfigMapping implements ClientConfigMapping {
     @Override
     public ClientConfig getConfigById(String clientId) throws ClientIdNotFoundException {
         return Optional.ofNullable(clientConfigMap.get(clientId))
-                .orElseThrow(()-> new ClientIdNotFoundException("Client id not found: " + clientId));
+                .orElseThrow(() -> new ClientIdNotFoundException("Client id not found: " + clientId));
     }
 }

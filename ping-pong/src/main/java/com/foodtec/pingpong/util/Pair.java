@@ -2,6 +2,7 @@ package com.foodtec.pingpong.util;
 
 /**
  * A simple pair class to hold two values.
+ *
  * @param first
  * @param second
  */

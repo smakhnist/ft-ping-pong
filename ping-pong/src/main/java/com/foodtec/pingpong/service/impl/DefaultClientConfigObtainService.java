@@ -1,11 +1,11 @@
 package com.foodtec.pingpong.service.impl;
 
+import com.foodtec.pingpong.config.AppProperties;
 import com.foodtec.pingpong.exception.ClientConfigServiceException;
 import com.foodtec.pingpong.exception.SecurityServiceException;
+import com.foodtec.pingpong.model.ClientConfig;
 import com.foodtec.pingpong.service.ClientConfigObtainService;
 import com.foodtec.pingpong.util.ResponseEntityUtil;
-import com.foodtec.pingpong.config.AppProperties;
-import com.foodtec.pingpong.model.ClientConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;

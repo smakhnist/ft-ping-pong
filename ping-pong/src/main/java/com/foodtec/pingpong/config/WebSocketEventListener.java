@@ -15,8 +15,6 @@ import org.springframework.web.socket.messaging.SessionConnectEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 
-import java.util.concurrent.Executors;
-
 import static com.foodtec.pingpong.config.PingPongAppConstants.CLIENT_ID_WS_HEADER_PARAM;
 import static com.foodtec.pingpong.config.PingPongAppConstants.WS_TOPIC_DESTINATION;
 

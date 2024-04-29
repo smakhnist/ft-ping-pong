@@ -20,12 +20,13 @@ public class ResponseEntityUtil {
 
     /**
      * Get the body of a response entity or throw an exception if the response entity is not successful.
-     * @param responseEntity - the response entity
+     *
+     * @param responseEntity    - the response entity
      * @param exceptionSupplier - the exception supplier
      * @return - the body of the response entity
      */
     public static <T> T getBodyOrThrow(ResponseEntity<T> responseEntity, Supplier<RuntimeException> exceptionSupplier) {
-        if (isSuccessful(responseEntity)){
+        if (isSuccessful(responseEntity)) {
             return responseEntity.getBody();
         } else {
             throw exceptionSupplier.get();

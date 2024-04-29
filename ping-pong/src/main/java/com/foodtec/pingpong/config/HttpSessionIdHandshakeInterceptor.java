@@ -1,6 +1,7 @@
 package com.foodtec.pingpong.config;
 
 import com.foodtec.pingpong.model.ClientConfig;
+import com.foodtec.pingpong.security.DDoSAttackerDetector;
 import com.foodtec.pingpong.service.ClientConfigObtainService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import static com.foodtec.pingpong.config.PingPongAppConstants.CLIENT_ID_WS_HEAD
 @Component
 public class HttpSessionIdHandshakeInterceptor implements HandshakeInterceptor {
     private final ClientConfigObtainService clientConfigObtainService;
+    private final DDoSAttackerDetector ddosAttackerDetector;
 
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
@@ -41,8 +43,8 @@ public class HttpSessionIdHandshakeInterceptor implements HandshakeInterceptor {
             return false;
         }
 
-        if (clientId.length() != 10) {
-            log.warn("Invalid clientId: {}", clientId);
+        if (!ddosAttackerDetector.check(clientId)) { // to prevent DDoS attacks
+            log.warn("Probable DDoS attack detected for clientId: {}", clientId);
             return false;
         }
 
