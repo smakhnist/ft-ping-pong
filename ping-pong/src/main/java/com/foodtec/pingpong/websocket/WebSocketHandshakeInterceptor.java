@@ -20,7 +20,7 @@ import static com.foodtec.pingpong.config.PingPongAppConstants.CLIENT_ID_WS_HEAD
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class HttpSessionIdHandshakeInterceptor implements HandshakeInterceptor {
+public class WebSocketHandshakeInterceptor implements HandshakeInterceptor {
     private final ClientConfigObtainService clientConfigObtainService;
     private final DDoSAttackerDetector ddosAttackerDetector;
 

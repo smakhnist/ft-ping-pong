@@ -14,7 +14,7 @@ import static com.foodtec.pingpong.config.PingPongAppConstants.WS_ENDPOINT;
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Autowired
-    private HttpSessionIdHandshakeInterceptor httpSessionIdHandshakeInterceptor;
+    private WebSocketHandshakeInterceptor webSocketHandshakeInterceptor;
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
@@ -25,6 +25,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint(WS_ENDPOINT)
-                .addInterceptors(httpSessionIdHandshakeInterceptor);
+                .addInterceptors(webSocketHandshakeInterceptor);
     }
 }
