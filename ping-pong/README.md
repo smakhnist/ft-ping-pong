@@ -34,7 +34,7 @@ Implementation details:
   validates the client id and auth id, checks if the client is entitled to connect.
 * WebSocketHandshakeInterceptor implies communication with the Security-Service and Client-Config-Service. To prevent
   abuse of Ping-Pong-Service
-  there was implemented DDoSAttackerDetector service that detects DDoS attacks (10 connections per minute for a one
+  there was implemented DDoSAttackerDetector service that detects DDoS attacks (max of 10 connections per minute for a one
   client connection) and blocks that client.
 * WebSocketEventListener listen '/acceptance/ping-pong' topic subscription events and respond with the connection
   acknowledgement to the client.
