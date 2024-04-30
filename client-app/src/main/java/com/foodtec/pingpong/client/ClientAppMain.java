@@ -24,11 +24,26 @@ public class ClientAppMain {
 
     public static void main(String[] args) {
         log.info("Starting WebSocket client...");
-        final String CLIENT_ID = "123";
-        final String AUTH_ID = "abcd";
+        final String DEFAULT_CLIENT_ID = "123";
+        final String DEFAULT_AUTH_ID = "abcd";
 
-        connect(CLIENT_ID, AUTH_ID);
-        new Scanner(System.in).nextLine(); // Don't close immediately.
+        if (args.length == 2) {
+            connect(args[0], args[1]);
+        } else if (args.length == 0) {
+            connect(DEFAULT_CLIENT_ID, DEFAULT_AUTH_ID);
+        } else {
+            log.error("Invalid number of arguments. Expected 0 or 2 arguments. Exiting...");
+            System.exit(1);
+        }
+
+        Scanner scanner = new Scanner(System.in);
+
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            if ("exit".equals(line)) {
+                break;
+            }
+        }
     }
 
     private static void connect(String clientId, String authId) {

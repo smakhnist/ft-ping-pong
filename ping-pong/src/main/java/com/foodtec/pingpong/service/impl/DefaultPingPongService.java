@@ -26,7 +26,7 @@ public class DefaultPingPongService implements PingPongService {
     public ResponseEntity<String> ping(String clientId) {
         Optional<String> sessionIdOptional = sessionLookupService.getSession(clientId);
         if (sessionIdOptional.isEmpty()) {
-            return logAndRespond(HttpStatus.NOT_FOUND, "No sessionIdOptional found for client-id: %s", clientId);
+            return logAndRespond(HttpStatus.NOT_FOUND, "No active session for client-id: %s", clientId);
         } else {
             if (clientConfigObtainService.getClientConfig(clientId).canPing()) {
                 messageSendingOperations.convertAndSend(PingPongAppConstants.WS_TOPIC_DESTINATION, "ping", MessageHeadersUtil.buildHeaders(SimpMessageType.MESSAGE, sessionIdOptional.get()));
@@ -40,7 +40,7 @@ public class DefaultPingPongService implements PingPongService {
     public ResponseEntity<String> pong(String clientId) {
         Optional<String> sessionIdOptional = sessionLookupService.getSession(clientId);
         if (sessionIdOptional.isEmpty()) {
-            return logAndRespond(HttpStatus.NOT_FOUND, "No sessionIdOptional found for client-id: %s", clientId);
+            return logAndRespond(HttpStatus.NOT_FOUND, "No active session for client-id: %s", clientId);
         } else {
             if (clientConfigObtainService.getClientConfig(clientId).canPong()) {
                 messageSendingOperations.convertAndSend(PingPongAppConstants.WS_TOPIC_DESTINATION, "pong", MessageHeadersUtil.buildHeaders(SimpMessageType.MESSAGE, sessionIdOptional.get()));
@@ -54,7 +54,7 @@ public class DefaultPingPongService implements PingPongService {
     public ResponseEntity<String> drop(String clientId) {
         Optional<String> sessionIdOptional = sessionLookupService.getSession(clientId);
         if (sessionIdOptional.isEmpty()) {
-            return logAndRespond(HttpStatus.NOT_FOUND, "No sessionIdOptional found for client-id: %s", clientId);
+            return logAndRespond(HttpStatus.NOT_FOUND, "No active session for client-id: %s", clientId);
         } else {
             messageSendingOperations.convertAndSend(PingPongAppConstants.WS_TOPIC_DESTINATION, "disconnect", MessageHeadersUtil.buildHeaders(SimpMessageType.DISCONNECT, sessionIdOptional.get()));
             return logAndRespond(HttpStatus.OK, "Client-id %s has been disconnected", clientId);

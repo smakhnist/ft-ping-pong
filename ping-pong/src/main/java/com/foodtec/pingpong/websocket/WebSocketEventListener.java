@@ -1,6 +1,6 @@
 package com.foodtec.pingpong.websocket;
 
-import com.foodtec.pingpong.service.ClientConnectionManager;
+import com.foodtec.pingpong.service.ClientSessionManager;
 import com.foodtec.pingpong.util.MessageHeadersUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ import static com.foodtec.pingpong.config.PingPongAppConstants.WS_TOPIC_DESTINAT
 @Component
 @RequiredArgsConstructor
 public class WebSocketEventListener {
-    private final ClientConnectionManager clientConnectionManager;
+    private final ClientSessionManager clientSessionManager;
     private final MessageSendingOperations<String> messageSendingOperations;
 
     @EventListener
@@ -33,7 +33,7 @@ public class WebSocketEventListener {
         SimpAttributes simpAttributes = SimpAttributesContextHolder.currentAttributes();
         String clientId = (String) simpAttributes.getAttribute(CLIENT_ID_WS_HEADER_PARAM);
         String sessionId = simpAttributes.getSessionId();
-        clientConnectionManager.addSession(clientId, sessionId);
+        clientSessionManager.addSession(clientId, sessionId);
         log.info("client-id -> session established: {} -> {}", clientId, sessionId);
     }
 
@@ -57,7 +57,7 @@ public class WebSocketEventListener {
     @EventListener
     private void handleSessionDisconnect(SessionDisconnectEvent event) {
         String sessionId = SimpAttributesContextHolder.currentAttributes().getSessionId();
-        clientConnectionManager.removeSession(sessionId);
+        clientSessionManager.removeSession(sessionId);
         log.info("Session {} has been disconnected", sessionId);
     }
 }
