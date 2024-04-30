@@ -2,7 +2,7 @@
 
 ###
 
-Please, see for the details of each module respectively.
+Project documentation for each module is located in the following readme files respectively:
 
 * /security-service/README.md
 * /client-config/README.md
