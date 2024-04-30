@@ -11,7 +11,10 @@ params:
   client-id: the client id  
 ```
 
-Call example: `curl -H "Authorization: Basic cc12345678" http://localhost:8090/client-config/123`
+Call example: 
+```commandline
+curl -H "Authorization: Basic cc12345678" http://localhost:8090/client-config/123
+```
 
 Response sample:
 
